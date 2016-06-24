@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://xmlns.jcp.org/xml/ns/javaee">
+
+  <scan>
+    <!-- These exclusions were added by Errai to avoid deploying client-side classes to the server -->
+    <exclude name = "org.stbland.test.errai4.client.local.AppEntryPoint" />    
+    <!-- End of Errai exclusions -->
+  </scan>
+</beans>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actions>
+    <action>
+        <actionName>CUSTOM-mvn-tomcat7-run-war</actionName>
+        <displayName>mvn-tomcat7-run-war</displayName>
+        <goals>
+            <goal>tomcat7:run-war</goal>
+        </goals>
+    </action>		
+    <action>
+        <actionName>CUSTOM-mvn-package</actionName>
+        <displayName>mvn-package</displayName>
+        <goals>
+            <goal>clean</goal>
+            <goal>package</goal>
+        </goals>
+    </action>        
+</actions>

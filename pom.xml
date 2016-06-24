@@ -1,0 +1,531 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.stbland.test.errai</groupId>
+    <artifactId>test-errai4-tomcat</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>war</packaging>
+
+    <name>test-errai4-tomcat</name>
+    <description>Test Errai 4 on Tomcat server</description>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        
+        <war.webXml>src\main\webapp\WEB-INF\web.xml</war.webXml>
+  
+        <errai.version>4.0.0.Beta1</errai.version>
+        <gwt.version>2.8.0-beta1</gwt.version>
+        <slf4j.version>1.5.11</slf4j.version>
+        <guava.version>20.0-SNAPSHOT</guava.version>
+        
+        <weld-api.version>2.0.SP1</weld-api.version>
+        <weld-spi.version>2.0.SP1</weld-spi.version>
+        <weld.version>2.3.4.Final</weld.version>
+	
+    
+        <javaee.version>1.0.2.Final</javaee.version>
+        <errai.dev.context>${project.artifactId}</errai.dev.context>
+        <as.version>8.1.0.Final</as.version>
+        <!-- Add the absolute path for $JBOSS_HOME below to manage another instance -->
+        <errai.jboss.home>${project.build.directory}/wildfly-${as.version}</errai.jboss.home>
+    </properties>
+    
+    <profiles>
+        <profile>
+            <id>war-rest-only</id>
+            <properties>
+                <war.webXml>src\main\webapp\WEB-INF\web-rest-only.xml</war.webXml>        
+            </properties>
+        </profile>
+    </profiles>
+	
+    <dependencyManagement>
+        <dependencies>
+            
+            <dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>javax.servlet-api</artifactId>
+                <version>3.0.1</version>
+            </dependency>
+                        
+            <dependency>
+                <groupId>javax.enterprise</groupId>
+                <artifactId>cdi-api</artifactId>
+                <version>2.0-EDR1</version>
+            </dependency>
+                        
+            <dependency>
+                <groupId>javax.inject</groupId>
+                <artifactId>javax.inject</artifactId>
+                <version>1</version>
+            </dependency>
+                                
+            <dependency>
+                <groupId>org.jboss.errai.bom</groupId>
+                <artifactId>errai-bom</artifactId>
+                <version>${errai.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <!-- Wel API -->
+            <dependency>
+                <groupId>org.jboss.weld</groupId>
+                <artifactId>weld-api</artifactId>
+                <version>${weld-api.version}</version>
+            </dependency>                
+                   
+            <!-- Wel SPI -->
+            <dependency>
+                <groupId>org.jboss.weld</groupId>
+                <artifactId>weld-spi</artifactId>
+                <version>${weld-spi.version}</version>
+            </dependency>                                   
+            
+            <!--
+            Weld Servlet Core 
+            https://docs.jboss.org/weld/reference/2.3.4.Final/en-US/html/environments.html#weld-servlet
+            -->
+            <dependency>
+                <groupId>org.jboss.weld</groupId>
+                <artifactId>weld-core</artifactId>
+                <version>${weld.version}</version>
+            </dependency>
+            
+            <dependency>
+                <groupId>org.jboss.weld.se</groupId>
+                <artifactId>weld-se-core</artifactId>
+                <version>${weld.version}</version>
+            </dependency>
+            
+            <dependency>
+                <groupId>org.jboss.weld.servlet</groupId>
+                <artifactId>weld-servlet-core</artifactId>
+                <version>${weld.version}</version>
+            </dependency>
+            
+            <dependency>
+                <groupId>org.jboss.weld.servlet</groupId>
+                <artifactId>weld-servlet</artifactId>
+                <version>${weld.version}</version>
+            </dependency>
+            
+            <dependency>
+                <groupId>org.jboss.weld.servlet</groupId>
+                <artifactId>weld-servlet</artifactId>
+                <classifier>sources</classifier>
+                <version>${weld.version}</version>
+            </dependency>                                                                  
+			
+            <!-- Guava -->
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava-gwt</artifactId>
+                <version>${guava.version}</version>
+            </dependency>
+            
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>${guava.version}</version>
+            </dependency>
+            
+        </dependencies>			
+    </dependencyManagement>
+
+    <dependencies>
+        
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+                           
+        <dependency>
+            <groupId>com.google.gwt</groupId>
+            <artifactId>gwt-user</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jboss.errai</groupId>
+            <artifactId>errai-javaee-all</artifactId>
+        </dependency>
+	
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jboss.errai</groupId>
+            <artifactId>errai-cdi-client</artifactId>
+        </dependency>
+          
+        <dependency>
+            <groupId>org.jboss.errai</groupId>
+            <artifactId>errai-cdi-server</artifactId>
+        </dependency>	
+        
+        <dependency>
+            <groupId>javax.enterprise</groupId>
+            <artifactId>cdi-api</artifactId>
+        </dependency>            
+        
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava-gwt</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>hsqldb</groupId>
+            <artifactId>hsqldb</artifactId>
+            <scope>provided</scope>
+        </dependency>        
+
+        <dependency>
+            <groupId>javax.inject</groupId>
+            <artifactId>javax.inject</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+            <classifier>sources</classifier>
+            <scope>provided</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>            
+        </dependency>
+        
+        <dependency>
+            <groupId>org.hibernate.common</groupId>
+            <artifactId>hibernate-commons-annotations</artifactId>
+        </dependency>
+               
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-entitymanager</artifactId>
+        </dependency>
+        
+        
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <classifier>sources</classifier>
+            <scope>provided</scope>
+        </dependency>        
+        
+        <dependency>
+            <groupId>org.jboss.errai</groupId>
+            <artifactId>errai-cdi-jboss</artifactId>
+
+            <exclusions>
+                <exclusion>
+                    <groupId>org.wildfly</groupId>
+                    <artifactId>wildfly-cli</artifactId>                    
+                </exclusion>
+                
+                <exclusion>
+                    <groupId>org.wildfly</groupId>
+                    <artifactId>wildfly-embedded</artifactId>                    
+                </exclusion>
+
+            </exclusions>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.jboss.errai</groupId>
+            <artifactId>errai-codegen-gwt</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.jboss.errai</groupId>
+            <artifactId>errai-data-binding</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.jboss.errai</groupId>
+            <artifactId>errai-javax-enterprise</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.jboss.errai</groupId>
+            <artifactId>errai-jaxrs-client</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.jboss.errai</groupId>
+            <artifactId>errai-jpa-client</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.jboss.errai</groupId>
+            <artifactId>errai-navigation</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.jboss.errai</groupId>
+            <artifactId>errai-tools</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.jboss.errai</groupId>
+            <artifactId>errai-ui</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        
+        <dependency>
+            
+            <groupId>org.jboss.errai</groupId>
+            <artifactId>errai-html5</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.jboss.logging</groupId>
+            <artifactId>jboss-logging</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>xml-apis</groupId>
+            <artifactId>xml-apis</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-codec-http</artifactId>
+        </dependency>    
+        
+        <!--
+        Weld API 
+        --> 
+        <dependency>
+            <groupId>org.jboss.weld</groupId>
+            <artifactId>weld-api</artifactId>
+        </dependency>             
+        
+        <dependency>
+            <groupId>org.jboss.weld</groupId>
+            <artifactId>weld-spi</artifactId>
+        </dependency>                     
+                
+        <!--
+        Weld Servlet Core 
+        https://docs.jboss.org/weld/reference/2.3.4.Final/en-US/html/environments.html#weld-servlet
+        -->
+        <dependency>
+            <groupId>org.jboss.weld</groupId>
+            <artifactId>weld-core</artifactId>
+        </dependency>
+            
+        <dependency>
+            <groupId>org.jboss.weld.se</groupId>
+            <artifactId>weld-se-core</artifactId>
+        </dependency>
+            
+        <dependency>
+            <groupId>org.jboss.weld.servlet</groupId>
+            <artifactId>weld-servlet-core</artifactId>
+        </dependency>
+            
+        <dependency>
+            <groupId>org.jboss.weld.servlet</groupId>
+            <artifactId>weld-servlet</artifactId>
+        </dependency>
+           
+
+        <!-- Jersey JAX-RS core Servlet 3.x implementation  -->
+        <dependency>
+            <groupId>org.glassfish.jersey.containers</groupId>
+            <artifactId>jersey-container-servlet</artifactId>
+            <version>2.23.1</version>
+        </dependency>                           
+                           
+        <!-- Jersey JAX-RS core Servlet 2.x implementation  -->
+        <!--
+        <dependency>
+            <groupId>org.glassfish.jersey.containers</groupId>
+            <artifactId>jersey-container-servlet-core</artifactId>
+            <version>2.23.1</version>
+        </dependency>
+        -->
+        
+        <dependency>
+            <groupId>org.glassfish.jersey.media</groupId>
+            <artifactId>jersey-media-json-processing</artifactId>
+            <version>2.23.1</version>
+        </dependency>        
+
+        <!-- Hibernate definition of the Java Persistence 2.0 (JSR 317) API.  -->
+        <dependency>
+            <groupId>org.hibernate.javax.persistence</groupId>
+            <artifactId>hibernate-jpa-2.0-api</artifactId>
+            <version>1.0.1.Final</version>
+        </dependency>
+        
+    </dependencies>
+
+    <build>
+        <finalName>test-errai4</finalName>
+        <outputDirectory>src/main/webapp/WEB-INF/classes</outputDirectory>                
+
+        <plugins>
+            
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-clean-plugin</artifactId>
+                <version>3.0.0</version>
+                <configuration>
+                    <filesets>
+                        <fileset>
+                            <directory>${basedir}</directory>
+                            <includes>
+                                <include>src/main/webapp/app/</include>
+                                <include>src/main/webapp/WEB-INF/deploy/</include>
+                                <include>src/main/webapp/WEB-INF/lib/</include>
+                                <include>**/gwt-unitCache/**</include>
+                                <include>.errai/</include>
+                            </includes>
+                        </fileset>
+                    </filesets>
+                </configuration>
+            </plugin>        
+        
+                                
+            <!-- maven-compiler-plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.5.1</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target> 
+                </configuration>
+            </plugin>
+            
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>gwt-maven-plugin</artifactId>
+                <version>${gwt.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>   
+                    <logLevel>INFO</logLevel>
+                    <noServer>false</noServer>          
+
+                    <!-- Errai's embedded WildFly launcher can be used to simplify IDE run configs as  
+                    server-side code can then be debugged directly (without needing to set up a 
+                    remote debugger) -->
+                    <!-- Errai will automatically skip deployment for classes under /client/local 
+                    to avoid class loading problems for classes that are not needed on the server. 
+                    To configure an alternative package filter for client-only classes, specify: 
+                    -Derrai.client.local.class.pattern=.*/myproject/client/.* -->
+                    <extraJvmArgs>-Xmx2048m -XX:CompileThreshold=7000 -Derrai.jboss.home=${errai.jboss.home} -Derrai.dev.context=${errai.dev.context}</extraJvmArgs>
+                    <!--
+                    <server>org.jboss.errai.cdi.server.gwt.EmbeddedWildFlyLauncher</server>
+                    -->
+                    <disableCastChecking>true</disableCastChecking>
+                    <runTarget>${errai.dev.context}/</runTarget>
+                    <soyc>false</soyc>
+                    <hostedWebapp>src/main/webapp</hostedWebapp>
+                    <strict>true</strict>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.google.gwt</groupId>
+                        <artifactId>gwt-user</artifactId>
+                        <version>${gwt.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>com.google.gwt</groupId>
+                        <artifactId>gwt-dev</artifactId>
+                        <version>${gwt.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+
+            <!-- maven-war-plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>2.6</version>
+                <configuration>
+                    <webXml>${war.webXml}</webXml>        
+                    <packagingExcludes>**/javax/**/*.*,**/client/local/**/*.class</packagingExcludes>
+                    <outputFileNameMapping>@{artifactId}@-@{baseVersion}@@{dashClassifier?}@.@{extension}@</outputFileNameMapping>                    
+                </configuration>                
+            </plugin>
+            
+            <!-- tomcat7-maven-plugin -->
+            <plugin>
+                <groupId>org.apache.tomcat.maven</groupId>
+                <artifactId>tomcat7-maven-plugin</artifactId>
+                <version>2.2</version>
+            </plugin>    
+   
+        </plugins>
+    </build>
+    
+    <repositories>
+        <repository>  
+            <id>repository.jboss.org</id>  
+            <name>JBoss Release Maven Repository</name>  
+            <url>https://repository.jboss.org/maven2</url>
+            <releases>  
+                <enabled>true</enabled>  
+            </releases>  
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>            
+        </repository>  
+        
+        <repository>
+            <id>snapshots.jboss.org</id>
+            <name>JBoss Snapshot Maven Repository</name>
+            <url>http://snapshots.jboss.org/maven2</url>
+            <layout>default</layout>
+            <releases>  
+                <enabled>false</enabled>  
+            </releases>              
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+            
+    </repositories>
+
+</project>

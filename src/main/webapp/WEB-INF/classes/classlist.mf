@@ -1,0 +1,1 @@
+org.stbland.test.errai4.client.local.AppEntryPoint
