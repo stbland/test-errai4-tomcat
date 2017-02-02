@@ -15,21 +15,32 @@
         
         <war.webXml>src\main\webapp\WEB-INF\web.xml</war.webXml>
   
-        <errai.version>4.0.0.Beta1</errai.version>
-        <gwt.version>2.8.0-beta1</gwt.version>
+        <errai.version>4.0.0.CR1</errai.version>
+        <gwt.version>2.8.0</gwt.version>
         <slf4j.version>1.5.11</slf4j.version>
         <guava.version>20.0</guava.version>
         
         <weld-api.version>2.0.SP1</weld-api.version>
         <weld-spi.version>2.0.SP1</weld-spi.version>
-        <weld.version>2.3.4.Final</weld.version>
-	
-    
+        <weld.version>2.4.1.Final</weld.version>
+	    
         <javaee.version>1.0.2.Final</javaee.version>
         <errai.dev.context>${project.artifactId}</errai.dev.context>
         <as.version>8.1.0.Final</as.version>
         <!-- Add the absolute path for $JBOSS_HOME below to manage another instance -->
         <errai.jboss.home>${project.build.directory}/wildfly-${as.version}</errai.jboss.home>
+		
+		<!-- Plugins versions -->
+		
+		<!-- maven-clean-plugin -->
+		<maven-clean-plugin.version>3.0.0</maven-clean-plugin.version>
+		<!-- maven-war-plugin -->
+		<maven-war-plugin.version>3.0.0</maven-war-plugin.version>
+		<!-- maven-compiler-plugin -->
+		<maven-compiler-plugin.version>3.6.1</maven-compiler-plugin.version>
+		<!-- tomcat7-maven-plugin -->		
+		<tomcat7-maven-plugin.version>2.2</tomcat7-maven-plugin.version>		
+			
     </properties>
     
     <profiles>
@@ -400,10 +411,11 @@
 
         <plugins>
             
+			<!-- maven-clean-plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-clean-plugin</artifactId>
-                <version>3.0.0</version>
+                <version>${maven-clean-plugin.version}</version>
                 <configuration>
                     <filesets>
                         <fileset>
@@ -421,17 +433,18 @@
             </plugin>        
         
                                 
-            <!-- maven-compiler-plugin -->
+            <!-- maven-compiler-plugin -->			
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.5.1</version>
+                <version>${maven-compiler-plugin.version}</version>
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target> 
                 </configuration>
             </plugin>
             
+			<!-- gwt-maven-plugin -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>gwt-maven-plugin</artifactId>
@@ -482,7 +495,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
-                <version>2.6</version>
+                <version>${maven-war-plugin.version}</version>
                 <configuration>
                     <webXml>${war.webXml}</webXml>        
                     <packagingExcludes>**/javax/**/*.*,**/client/local/**/*.class</packagingExcludes>
@@ -494,8 +507,8 @@
             <plugin>
                 <groupId>org.apache.tomcat.maven</groupId>
                 <artifactId>tomcat7-maven-plugin</artifactId>
-                <version>2.2</version>
-            </plugin>    
+                <version>${tomcat7-maven-plugin.version}</version>
+            </plugin>    		
    
         </plugins>
     </build>
