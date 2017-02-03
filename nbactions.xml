@@ -1,18 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<actions>
+<actions>        
+    <action>
+        <actionName>CUSTOM-mvn-gwt-run-codeserver</actionName>
+        <displayName>Run Super Dev Mode - Start GWT code server</displayName>
+        <goals>
+            <goal>gwt:run-codeserver</goal>
+        </goals>
+        <activatedProfiles>
+            <activatedProfile>gwt-codeserver</activatedProfile>
+        </activatedProfiles>
+    </action>
+    <action>
+        <actionName>CUSTOM-mvn-tomcat7-run-war-gwt-codeserver</actionName>
+        <displayName>Run Super Dev Mode - Start Tomcat server</displayName>
+        <goals>
+            <goal>package</goal>
+            <goal>tomcat7:run-war</goal>
+        </goals>
+        <properties>
+            <skipTests>true</skipTests>
+        </properties>
+        <activatedProfiles>
+            <activatedProfile>gwt-codeserver</activatedProfile>
+            <activatedProfile>gwt-no-precompile</activatedProfile>
+            <activatedProfile>tomcat7</activatedProfile>
+        </activatedProfiles>
+    </action>
     <action>
         <actionName>CUSTOM-mvn-tomcat7-run-war</actionName>
-        <displayName>mvn-tomcat7-run-war</displayName>
+        <displayName>Run WAR on Tomcat server</displayName>
         <goals>
             <goal>tomcat7:run-war</goal>
         </goals>
+        <properties>
+            <skipTests>true</skipTests>
+        </properties>
+        <activatedProfiles>
+            <activatedProfile>tomcat7</activatedProfile>
+        </activatedProfiles>
     </action>		
     <action>
         <actionName>CUSTOM-mvn-package</actionName>
-        <displayName>mvn-package</displayName>
+        <displayName>Build the WAR</displayName>
         <goals>
             <goal>clean</goal>
             <goal>package</goal>
         </goals>
-    </action>        
+    </action>
 </actions>

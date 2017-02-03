@@ -15,17 +15,17 @@ git clone https://github.com/stbland/test-errai4-tomcat.git
 cd test-errai4-tomcat
 ```
 	
-## Run on Tomcat
+## Run WAR on Tomcat server
 
 ```bash	
-mvn -Ptomcat7 tomcat7:run-war
+mvn -Ptomcat7 package tomcat7:run-war
 ```
 
 open [http://localhost:8080/test-errai4-tomcat/](http://localhost:8080/test-errai4-tomcat/) in your web brower
 
 ## Run Super Dev Mode
 
-### Start GWT Code Server
+### Start GWT code server
 
 In a first terminal
 	
@@ -42,3 +42,9 @@ mvn -Pgwt-codeserver -Pgwt-no-precompile -Ptomcat7 package tomcat7:run-war
 ```
 
 open [http://localhost:8080/](http://localhost:8080/) in your web brower
+
+## Build the WAR
+
+```bash	
+mvn clean package
+```
