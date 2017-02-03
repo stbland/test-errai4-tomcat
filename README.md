@@ -29,11 +29,15 @@ open http://localhost:8080/test-errai4-tomcat/ in your web brower
 Run Super Dev Mode
 ------------------
 
+## Start GWT Code Server
+
 In a first terminal
 	
 ```bash	
 mvn -Pgwt-codeserver gwt:run-codeserver
 ```
+
+## Start Tomcat server
 
 In a second terminal
 
