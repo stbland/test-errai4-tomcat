@@ -15,6 +15,26 @@
         
         <war.webXml>src\main\webapp\WEB-INF\web.xml</war.webXml>
   
+        <webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
+        <webapp.contextPath>/${project.artifactId}</webapp.contextPath>
+        
+        <errai.dev.context>${project.artifactId}</errai.dev.context>
+        
+        <!-- Add the absolute path for $JBOSS_HOME below to manage another instance -->
+        <as.version>8.1.0.Final</as.version>
+        <errai.jboss.home>${project.build.directory}/wildfly-${as.version}</errai.jboss.home>
+                
+        <gwt.draftCompile>false</gwt.draftCompile>
+        <gwt.precompile>true</gwt.precompile>
+        <gwt.skipCompile>false</gwt.skipCompile>        
+        <gwt.moduleShortName>app</gwt.moduleShortName>                                
+        <gwt.moduleName>org.stbland.test.errai4.App</gwt.moduleName>        
+        <gwt.runTarget>${webapp.contextPath}/app.html</gwt.runTarget>               
+        
+        <!-- **************** -->
+        <!-- * Dépendencies * -->
+        <!-- **************** -->
+
         <errai.version>4.0.0.CR1</errai.version>
         <gwt.version>2.8.0</gwt.version>
         <slf4j.version>1.5.11</slf4j.version>
@@ -22,43 +42,120 @@
         
         <weld-api.version>2.0.SP1</weld-api.version>
         <weld-spi.version>2.0.SP1</weld-spi.version>
-        <weld.version>2.4.1.Final</weld.version>
+        <weld.version>2.4.2.Final</weld.version>
 	    
-        <javaee.version>1.0.2.Final</javaee.version>
-        <errai.dev.context>${project.artifactId}</errai.dev.context>
-        <as.version>8.1.0.Final</as.version>
-        <!-- Add the absolute path for $JBOSS_HOME below to manage another instance -->
-        <errai.jboss.home>${project.build.directory}/wildfly-${as.version}</errai.jboss.home>
+        <javaee.version>1.0.2.Final</javaee.version>                                
+        <!-- javax.servlet-api -->
+        <javax.servlet-api.version>3.1.0</javax.servlet-api.version>        
 		
-		<!-- Plugins versions -->
+        <!-- *********** -->
+        <!-- * Plugins * -->
+        <!-- *********** -->                     
 		
-		<!-- maven-clean-plugin -->
-		<maven-clean-plugin.version>3.0.0</maven-clean-plugin.version>
-		<!-- maven-war-plugin -->
-		<maven-war-plugin.version>3.0.0</maven-war-plugin.version>
-		<!-- maven-compiler-plugin -->
-		<maven-compiler-plugin.version>3.6.1</maven-compiler-plugin.version>
-		<!-- tomcat7-maven-plugin -->		
-		<tomcat7-maven-plugin.version>2.2</tomcat7-maven-plugin.version>		
+        <!-- maven-clean-plugin -->
+        <maven-clean-plugin.version>3.0.0</maven-clean-plugin.version>
+        <!-- maven-war-plugin -->
+        <maven-war-plugin.version>3.0.0</maven-war-plugin.version>
+        <!-- maven-compiler-plugin -->
+        <maven-compiler-plugin.version>3.6.1</maven-compiler-plugin.version>
+        <!-- tomcat7-maven-plugin -->		
+        <tomcat7-maven-plugin.version>2.2</tomcat7-maven-plugin.version>		
 			
     </properties>
     
     <profiles>
+        
+        <profile>
+            <id>gwt-codeserver</id>
+            <properties>
+                <gwt.draftCompile>true</gwt.draftCompile>                
+                <gwt.moduleName>org.stbland.test.errai4.App_CodeServer</gwt.moduleName>
+                <gwt.runTarget>/app.html</gwt.runTarget>                
+                <webapp.contextPath>/</webapp.contextPath>
+            </properties>
+            
+        </profile>
+		
+        <profile>
+            <id>webapp-contextpath-root</id>
+            <properties>
+                <webapp.contextPath>/</webapp.contextPath>
+            </properties>
+        </profile>
+		
+
+        <profile>
+            <id>gwt-draftCompile</id>
+            <properties>
+                <gwt.draftCompile>true</gwt.draftCompile>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>gwt-no-precompile</id>
+            <properties>
+                <gwt.precompile>false</gwt.precompile>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>gwt-skipCompile</id>
+            <properties>
+                <gwt.skipCompile>true</gwt.skipCompile>
+            </properties>
+        </profile>     
+                
         <profile>
             <id>war-rest-only</id>
             <properties>
                 <war.webXml>src\main\webapp\WEB-INF\web-rest-only.xml</war.webXml>        
             </properties>
         </profile>
+        
+        <profile>
+            <id>tomcat7</id>
+            
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            
+            <build>
+                <plugins>
+                    <!-- tomcat7-maven-plugin -->
+                    <plugin>
+                        <groupId>org.apache.tomcat.maven</groupId>
+                        <artifactId>tomcat7-maven-plugin</artifactId>
+                        <version>${tomcat7-maven-plugin.version}</version>
+                        <configuration>
+                            <fork>false</fork>
+                            <ajpPort>-1</ajpPort>
+                            <path>${webapp.contextPath}</path>
+                            <!-- Deploy -->
+                            <update>true</update>
+                            <enableNaming>false</enableNaming>                            
+                            <charset>utf-8</charset>								                            
+                            <extraDependencies>
+                                <extraDependency>
+                                    <groupId>javax.inject</groupId>
+                                    <artifactId>javax.inject</artifactId>
+                                </extraDependency>        
+                            </extraDependencies>                       
+                        </configuration>                      
+                    </plugin>
+                </plugins>        
+            </build>
+            
+        </profile>                    
     </profiles>
 	
     <dependencyManagement>
         <dependencies>
             
+            <!-- javax.servlet-api -->
             <dependency>
                 <groupId>javax.servlet</groupId>
                 <artifactId>javax.servlet-api</artifactId>
-                <version>3.0.1</version>
+                <version>${javax.servlet-api.version}</version>
             </dependency>
                         
             <dependency>
@@ -81,14 +178,14 @@
                 <scope>import</scope>
             </dependency>
 
-            <!-- Wel API -->
+            <!-- Weld API -->
             <dependency>
                 <groupId>org.jboss.weld</groupId>
                 <artifactId>weld-api</artifactId>
                 <version>${weld-api.version}</version>
             </dependency>                
                    
-            <!-- Wel SPI -->
+            <!-- Weld SPI -->
             <dependency>
                 <groupId>org.jboss.weld</groupId>
                 <artifactId>weld-spi</artifactId>
@@ -97,7 +194,7 @@
             
             <!--
             Weld Servlet Core 
-            https://docs.jboss.org/weld/reference/2.3.4.Final/en-US/html/environments.html#weld-servlet
+            https://docs.jboss.org/weld/reference/2.4.2.Final/en-US/html/environments.html#weld-servlet
             -->
             <dependency>
                 <groupId>org.jboss.weld</groupId>
@@ -150,7 +247,7 @@
         
         <dependency>
             <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
+            <artifactId>javax.servlet-api</artifactId>            
             <scope>provided</scope>
         </dependency>
                            
@@ -406,12 +503,12 @@
     </dependencies>
 
     <build>
-        <finalName>test-errai4</finalName>
-        <outputDirectory>src/main/webapp/WEB-INF/classes</outputDirectory>                
-
+        <finalName>${project.artifactId}</finalName>
+        <outputDirectory>${webappDirectory}/WEB-INF/classes</outputDirectory>
+        
         <plugins>
             
-			<!-- maven-clean-plugin -->
+            <!-- maven-clean-plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-clean-plugin</artifactId>
@@ -444,7 +541,7 @@
                 </configuration>
             </plugin>
             
-			<!-- gwt-maven-plugin -->
+            <!-- gwt-maven-plugin -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>gwt-maven-plugin</artifactId>
@@ -457,8 +554,13 @@
                     </execution>
                 </executions>
                 <configuration>   
+                    <module>${gwt.moduleName}</module>
+                    <skip>${gwt.skipCompile}</skip>
+                    <draftCompile>${gwt.draftCompile}</draftCompile>
+                    <precompile>${gwt.precompile}</precompile>                                        
                     <logLevel>INFO</logLevel>
-                    <noServer>false</noServer>          
+                    <noServer>false</noServer>   
+                    <codeServerWorkDir>target</codeServerWorkDir>       
 
                     <!-- Errai's embedded WildFly launcher can be used to simplify IDE run configs as  
                     server-side code can then be debugged directly (without needing to set up a 
@@ -472,7 +574,7 @@
                     <server>org.jboss.errai.cdi.server.gwt.EmbeddedWildFlyLauncher</server>
                     -->
                     <disableCastChecking>true</disableCastChecking>
-                    <runTarget>${errai.dev.context}/</runTarget>
+                    <runTarget>${gwt.runTarget}</runTarget>
                     <soyc>false</soyc>
                     <hostedWebapp>src/main/webapp</hostedWebapp>
                     <strict>true</strict>
@@ -502,14 +604,7 @@
                     <outputFileNameMapping>@{artifactId}@-@{baseVersion}@@{dashClassifier?}@.@{extension}@</outputFileNameMapping>                    
                 </configuration>                
             </plugin>
-            
-            <!-- tomcat7-maven-plugin -->
-            <plugin>
-                <groupId>org.apache.tomcat.maven</groupId>
-                <artifactId>tomcat7-maven-plugin</artifactId>
-                <version>${tomcat7-maven-plugin.version}</version>
-            </plugin>    		
-   
+                        
         </plugins>
     </build>
     
