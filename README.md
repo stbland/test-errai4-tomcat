@@ -21,7 +21,7 @@ cd test-errai4-tomcat
 mvn -Ptomcat7 tomcat7:run-war
 ```
 
-open (http://localhost:8080/test-errai4-tomcat/) in your web brower
+open [http://localhost:8080/test-errai4-tomcat/](http://localhost:8080/test-errai4-tomcat/) in your web brower
 
 ## Run Super Dev Mode
 
@@ -41,4 +41,4 @@ In a second terminal
 mvn -Pgwt-codeserver -Pgwt-no-precompile -Ptomcat7 package tomcat7:run-war
 ```
 
-open (http://localhost:8080/) in your web brower
+open [http://localhost:8080/](http://localhost:8080/) in your web brower
