@@ -27,6 +27,7 @@
   <link href="<%=contextPath%>/css/application.css" rel="stylesheet">
   <script type="text/javascript">
     erraiJaxRsApplicationRoot = "rest";
+    erraiJaxRsJacksonMarshallingActive = true;
   </script>
   <script type="text/javascript" src="<%=contextPath%>/app/app.nocache.js"></script>
 

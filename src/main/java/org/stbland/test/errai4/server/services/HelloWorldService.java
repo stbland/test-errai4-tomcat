@@ -13,6 +13,10 @@ import org.slf4j.LoggerFactory;
 public class HelloWorldService implements MessageCallback {
 
     final Logger logger = LoggerFactory.getLogger(HelloWorldService.class);
+    
+    public HelloWorldService() {
+        logger.debug("HelloWorldService constructor");
+    }
 
     @Override
     public void callback(Message message) {

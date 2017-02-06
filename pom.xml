@@ -16,14 +16,8 @@
         <war.webXml>src\main\webapp\WEB-INF\web.xml</war.webXml>
   
         <webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
-        <webapp.contextPath>/${project.artifactId}</webapp.contextPath>
-        
-        <errai.dev.context>${project.artifactId}</errai.dev.context>
-        
-        <!-- Add the absolute path for $JBOSS_HOME below to manage another instance -->
-        <as.version>8.1.0.Final</as.version>
-        <errai.jboss.home>${project.build.directory}/wildfly-${as.version}</errai.jboss.home>
-                
+        <webapp.contextPath>/${project.artifactId}</webapp.contextPath>       
+                       
         <gwt.draftCompile>false</gwt.draftCompile>
         <gwt.precompile>true</gwt.precompile>
         <gwt.skipCompile>false</gwt.skipCompile>        
@@ -47,7 +41,10 @@
         <javaee.version>1.0.2.Final</javaee.version>                                
         <!-- javax.servlet-api -->
         <javax.servlet-api.version>3.1.0</javax.servlet-api.version>        
-		
+        
+        <!-- Jersey JAX-RS core Servlet 3.x implementation  -->
+        <jersey-container-servlet.version>2.25</jersey-container-servlet.version>        
+               		
         <!-- *********** -->
         <!-- * Plugins * -->
         <!-- *********** -->                     
@@ -104,13 +101,6 @@
                 <gwt.skipCompile>true</gwt.skipCompile>
             </properties>
         </profile>     
-                
-        <profile>
-            <id>war-rest-only</id>
-            <properties>
-                <war.webXml>src\main\webapp\WEB-INF\web-rest-only.xml</war.webXml>        
-            </properties>
-        </profile>
         
         <profile>
             <id>tomcat7</id>
@@ -240,6 +230,27 @@
                 <version>${guava.version}</version>
             </dependency>
             
+            <!-- Jersey JAX-RS core Servlet 3.x implementation  -->
+            <dependency>
+                <groupId>org.glassfish.jersey.containers</groupId>
+                <artifactId>jersey-container-servlet</artifactId>
+                <version>${jersey-container-servlet.version}</version>
+            </dependency>                                       
+            
+            <!-- Jersey JAX-RS - Media Json Processing -->
+            <dependency>
+                <groupId>org.glassfish.jersey.media</groupId>
+                <artifactId>jersey-media-json-processing</artifactId>
+                <version>${jersey-container-servlet.version}</version>
+            </dependency>         
+            
+            <!-- Jersey Media Json Jackson -->
+            <dependency>
+                <groupId>org.glassfish.jersey.media</groupId>
+                <artifactId>jersey-media-json-jackson</artifactId>
+                <version>${jersey-container-servlet.version}</version>
+            </dependency>            
+                        
         </dependencies>			
     </dependencyManagement>
 
@@ -282,6 +293,11 @@
             <groupId>org.jboss.errai</groupId>
             <artifactId>errai-cdi-server</artifactId>
         </dependency>	
+        
+        <dependency>
+            <groupId>org.jboss.errai</groupId>
+            <artifactId>errai-marshalling</artifactId>
+        </dependency>        
         
         <dependency>
             <groupId>javax.enterprise</groupId>
@@ -389,6 +405,11 @@
         
         <dependency>
             <groupId>org.jboss.errai</groupId>
+            <artifactId>errai-jaxrs-provider</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.jboss.errai</groupId>
             <artifactId>errai-jpa-client</artifactId>
             <scope>provided</scope>
         </dependency>
@@ -468,30 +489,27 @@
         <dependency>
             <groupId>org.jboss.weld.servlet</groupId>
             <artifactId>weld-servlet</artifactId>
-        </dependency>
-           
+            <scope>runtime</scope>
+        </dependency>           
 
         <!-- Jersey JAX-RS core Servlet 3.x implementation  -->
         <dependency>
             <groupId>org.glassfish.jersey.containers</groupId>
-            <artifactId>jersey-container-servlet</artifactId>
-            <version>2.23.1</version>
+            <artifactId>jersey-container-servlet</artifactId>        
         </dependency>                           
                            
-        <!-- Jersey JAX-RS core Servlet 2.x implementation  -->
-        <!--
-        <dependency>
-            <groupId>org.glassfish.jersey.containers</groupId>
-            <artifactId>jersey-container-servlet-core</artifactId>
-            <version>2.23.1</version>
-        </dependency>
-        -->
-        
+        <!-- Jersey JAX-RS - Media Json Processing -->
         <dependency>
             <groupId>org.glassfish.jersey.media</groupId>
             <artifactId>jersey-media-json-processing</artifactId>
-            <version>2.23.1</version>
-        </dependency>        
+        </dependency>       
+        
+        <!-- Jersey Media Json Jackson -->
+        <dependency>
+            <groupId>org.glassfish.jersey.media</groupId>
+            <artifactId>jersey-media-json-jackson</artifactId>
+            <scope>runtime</scope>
+        </dependency>                       
 
         <!-- Hibernate definition of the Java Persistence 2.0 (JSR 317) API.  -->
         <dependency>
@@ -525,6 +543,12 @@
                                 <include>.errai/</include>
                             </includes>
                         </fileset>
+                        <fileset>
+                            <directory>${basedir}/scripts</directory>
+                            <includes>
+                                <include>.errai/</include>
+                            </includes>
+                        </fileset>                        
                     </filesets>
                 </configuration>
             </plugin>        
@@ -561,18 +585,7 @@
                     <logLevel>INFO</logLevel>
                     <noServer>false</noServer>   
                     <codeServerWorkDir>target</codeServerWorkDir>       
-
-                    <!-- Errai's embedded WildFly launcher can be used to simplify IDE run configs as  
-                    server-side code can then be debugged directly (without needing to set up a 
-                    remote debugger) -->
-                    <!-- Errai will automatically skip deployment for classes under /client/local 
-                    to avoid class loading problems for classes that are not needed on the server. 
-                    To configure an alternative package filter for client-only classes, specify: 
-                    -Derrai.client.local.class.pattern=.*/myproject/client/.* -->
-                    <extraJvmArgs>-Xmx2048m -XX:CompileThreshold=7000 -Derrai.jboss.home=${errai.jboss.home} -Derrai.dev.context=${errai.dev.context}</extraJvmArgs>
-                    <!--
-                    <server>org.jboss.errai.cdi.server.gwt.EmbeddedWildFlyLauncher</server>
-                    -->
+                    <extraJvmArgs>-Xmx2048m -XX:CompileThreshold=7000</extraJvmArgs>
                     <disableCastChecking>true</disableCastChecking>
                     <runTarget>${gwt.runTarget}</runTarget>
                     <soyc>false</soyc>
@@ -620,20 +633,7 @@
                 <enabled>false</enabled>
             </snapshots>            
         </repository>  
-        
-        <repository>
-            <id>snapshots.jboss.org</id>
-            <name>JBoss Snapshot Maven Repository</name>
-            <url>http://snapshots.jboss.org/maven2</url>
-            <layout>default</layout>
-            <releases>  
-                <enabled>false</enabled>  
-            </releases>              
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-            
+          
     </repositories>
 
 </project>
