@@ -44,6 +44,9 @@
         
         <!-- Jersey JAX-RS core Servlet 3.x implementation  -->
         <jersey-container-servlet.version>2.25</jersey-container-servlet.version>        
+        
+        <!-- Java Annotation Indexer -->
+        <jandex.version>2.0.3.Final</jandex.version>        
                		
         <!-- *********** -->
         <!-- * Plugins * -->
@@ -55,6 +58,8 @@
         <maven-war-plugin.version>3.0.0</maven-war-plugin.version>
         <!-- maven-compiler-plugin -->
         <maven-compiler-plugin.version>3.6.1</maven-compiler-plugin.version>
+        <!-- maven-surefire-plugin -->
+        <maven-surefire-plugin.version>2.19.1</maven-surefire-plugin.version>        
         <!-- tomcat7-maven-plugin -->		
         <tomcat7-maven-plugin.version>2.2</tomcat7-maven-plugin.version>		
 			
@@ -199,6 +204,12 @@
             </dependency>
             
             <dependency>
+                <groupId>org.jboss.weld.se</groupId>
+                <artifactId>weld-se</artifactId>
+                <version>${weld.version}</version>
+            </dependency>               
+            
+            <dependency>
                 <groupId>org.jboss.weld.servlet</groupId>
                 <artifactId>weld-servlet-core</artifactId>
                 <version>${weld.version}</version>
@@ -249,7 +260,14 @@
                 <groupId>org.glassfish.jersey.media</groupId>
                 <artifactId>jersey-media-json-jackson</artifactId>
                 <version>${jersey-container-servlet.version}</version>
-            </dependency>            
+            </dependency>       
+            
+            <!-- Java Annotation Indexer -->
+            <dependency>
+                <groupId>org.jboss</groupId>
+                <artifactId>jandex</artifactId>       
+                <version>${jandex.version}</version>
+            </dependency>                              
                         
         </dependencies>			
     </dependencyManagement>
@@ -283,6 +301,12 @@
             <artifactId>junit</artifactId>
             <scope>test</scope>
         </dependency>
+        
+        <dependency>
+            <groupId>org.jboss.weld.se</groupId>
+            <artifactId>weld-se</artifactId>
+            <scope>test</scope>
+        </dependency>                       
 
         <dependency>
             <groupId>org.jboss.errai</groupId>
@@ -518,6 +542,12 @@
             <version>1.0.1.Final</version>
         </dependency>
         
+        <!-- Java Annotation Indexer -->
+        <dependency>
+            <groupId>org.jboss</groupId>
+            <artifactId>jandex</artifactId>
+        </dependency>        
+        
     </dependencies>
 
     <build>
@@ -537,6 +567,7 @@
                             <directory>${basedir}</directory>
                             <includes>
                                 <include>src/main/webapp/app/</include>
+                                <include>src/main/webapp/WEB-INF/classes/</include>                                
                                 <include>src/main/webapp/WEB-INF/deploy/</include>
                                 <include>src/main/webapp/WEB-INF/lib/</include>
                                 <include>**/gwt-unitCache/**</include>
@@ -552,8 +583,7 @@
                     </filesets>
                 </configuration>
             </plugin>        
-        
-                                
+                                        
             <!-- maven-compiler-plugin -->			
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -563,6 +593,55 @@
                     <source>1.8</source>
                     <target>1.8</target> 
                 </configuration>
+            </plugin>
+            
+            <!-- maven-surefire-plugin -->            
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${maven-surefire-plugin.version}</version>                
+                <configuration>
+                    
+                    <additionalClasspathElements>       
+                        <additionalClasspathElement>${basedir}/target/${project.build.finalName}/WEB-INF/classes/</additionalClasspathElement>						
+                        <additionalClasspathElement>${basedir}/src/main/java/</additionalClasspathElement>
+                        <additionalClasspathElement>${basedir}/src/test/java/</additionalClasspathElement>						
+                    </additionalClasspathElements>
+                    
+                    <useSystemClassLoader>false</useSystemClassLoader>
+                    
+                    <useManifestOnlyJar>false</useManifestOnlyJar>
+                    <forkMode>pertest</forkMode>                    
+                                       
+                    <systemProperties>
+                        <property>
+                            <name>java.io.tmpdir</name>
+                            <value>${project.build.directory}</value>
+                        </property>
+                        
+                        <!-- Do not accidently package server test marshallers when building Errai -->
+                        <property>
+                            <name>errai.marshalling.server.classOutput.enabled</name>
+                            <value>false</value>
+                        </property>
+
+                        <!-- Must disable long polling for automated tests to succeed -->
+                        <property>
+                            <name>org.jboss.errai.bus.do_long_poll</name>
+                            <value>false</value>
+                        </property>
+
+                        <!-- Disable caching of generated code -->
+                        <property>
+                            <name>errai.devel.nocache</name>
+                            <value>true</value>
+                        </property>
+                    </systemProperties>
+                    
+                    <includes>
+                        <include>**/*TestCase.java</include>
+                    </includes>                    
+                </configuration>            
             </plugin>
             
             <!-- gwt-maven-plugin -->

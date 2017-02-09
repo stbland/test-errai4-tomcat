@@ -2,3 +2,6 @@ target/
 scripts/.errai/
 scripts/doMaven.bat
 scripts/*.lnk
+/target - Copie/
+/target.ok/
+/target.ko/
