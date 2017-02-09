@@ -20,8 +20,7 @@ public class PersonDaoTestCase {
     public void findAll() {
         final List<Person> personList = personDao.findAll();
         Assert.assertNotNull(personList);
-        Assert.assertEquals(2, personList.size());
-
+        Assert.assertEquals(3, personList.size());
     }
 
 }
