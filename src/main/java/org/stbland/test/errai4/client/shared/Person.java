@@ -5,16 +5,26 @@ import org.jboss.errai.common.client.api.annotations.Portable;
 @Portable
 public class Person {
 
+    private Integer id;
     private String firstName;
     private String lastName;
 
     public Person() {
     }
 
-    public Person(String firstName, String lastName) {
+    public Person(Integer id, String firstName, String lastName) {
         this();
+        this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getFirstName() {

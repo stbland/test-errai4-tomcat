@@ -1,0 +1,11 @@
+@echo off
+set POMFILE=..\pom.xml
+set DOMAVENARGS=%*
+if "%DOMAVENARGS%" == "" goto showUsage
+if exist %POMFILE% goto callMaven
+:showUsage
+echo "Usage: doMaven.bat [options] [<goal(s)>] [<phase(s)>]"
+goto end
+:callMaven
+call mvn -f %POMFILE% %DOMAVENARGS%
+:end
