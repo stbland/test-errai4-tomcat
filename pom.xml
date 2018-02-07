@@ -29,6 +29,7 @@
         <!-- * Dépendencies * -->
         <!-- **************** -->
 
+	<!-- doesn't compile with Errai 4.1.3.Final -->
         <errai.version>4.1.0.Final</errai.version>
         <gwt.version>2.8.2</gwt.version>
         <slf4j.version>1.5.11</slf4j.version>
