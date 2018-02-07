@@ -29,7 +29,7 @@
         <!-- * Dépendencies * -->
         <!-- **************** -->
 
-        <errai.version>4.0.3.Final</errai.version>
+        <errai.version>4.1.0.Final</errai.version>
         <gwt.version>2.8.2</gwt.version>
         <slf4j.version>1.5.11</slf4j.version>
         <guava.version>20.0</guava.version>
