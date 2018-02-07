@@ -1,7 +1,6 @@
+.errai/
 target/
 scripts/.errai/
 scripts/doMaven.bat
+scripts/doMaven.sh
 scripts/*.lnk
-/target - Copie/
-/target.ok/
-/target.ko/
