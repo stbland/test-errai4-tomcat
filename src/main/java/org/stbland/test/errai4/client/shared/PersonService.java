@@ -12,5 +12,7 @@ public interface PersonService {
     @GET
     @Produces("application/json")
     List<Person> findAll(); 
+    
+    boolean isDaoOk();
 
 }
