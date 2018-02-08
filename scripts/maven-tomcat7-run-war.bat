@@ -1,3 +1,4 @@
 @echo off
 set LOGNAME=tomcat
-call doMaven.bat -Ptomcat7 -Dmaven.test.skip=true tomcat7:run-war
+set SCRIPTPATH=%~dp0
+call "%SCRIPTPATH%doMaven.bat" -Ptomcat7 -Dmaven.test.skip=true tomcat7:run-war

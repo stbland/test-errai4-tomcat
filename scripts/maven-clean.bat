@@ -1,1 +1,3 @@
-mvn -f ..\pom.xml clean
+@echo off
+set SCRIPTPATH=%~dp0
+call "%SCRIPTPATH%doMaven.bat" clean

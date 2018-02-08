@@ -1,3 +1,4 @@
 @echo off
-call doMaven.bat dependency:tree
+set SCRIPTPATH=%~dp0
+call "%SCRIPTPATH%doMaven.bat" dependency:tree
 pause

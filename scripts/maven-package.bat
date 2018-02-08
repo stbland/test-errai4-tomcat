@@ -1,2 +1,3 @@
 @echo off
-call doMaven.bat clean package
+set SCRIPTPATH=%~dp0
+call "%SCRIPTPATH%doMaven.bat" -DskipTests clean package
