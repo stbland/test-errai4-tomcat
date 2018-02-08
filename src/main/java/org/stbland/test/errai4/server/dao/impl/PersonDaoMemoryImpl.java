@@ -4,11 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import javax.enterprise.context.ApplicationScoped;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.stbland.test.errai4.client.shared.Person;
 import org.stbland.test.errai4.server.dao.PersonDao;
 
+@ApplicationScoped
 public class PersonDaoMemoryImpl implements PersonDao {
 
     final Logger logger = LoggerFactory.getLogger(PersonDaoMemoryImpl.class);
