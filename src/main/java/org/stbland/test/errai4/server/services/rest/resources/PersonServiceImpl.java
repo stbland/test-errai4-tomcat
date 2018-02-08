@@ -3,7 +3,7 @@ package org.stbland.test.errai4.server.services.rest.resources;
 import java.util.List;
 import javax.enterprise.inject.Default;
 import javax.enterprise.context.ApplicationScoped;
-// import javax.inject.Inject;
+import javax.inject.Inject;
 import javax.ws.rs.Path;
 import org.stbland.test.errai4.client.shared.Person;
 import org.stbland.test.errai4.client.shared.PersonService;
@@ -14,8 +14,8 @@ import org.stbland.test.errai4.server.dao.PersonDao;
 import org.stbland.test.errai4.server.dao.impl.PersonDaoMemoryImpl;
 
 @Path("/person")
-// @ApplicationScoped
-// @Default
+@ApplicationScoped
+@Default
 public class PersonServiceImpl implements PersonService {
 
     final Logger logger = LoggerFactory.getLogger(PersonServiceImpl.class);
