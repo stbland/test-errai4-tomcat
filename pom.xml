@@ -57,7 +57,7 @@
         <javax.servlet-api.version>3.1.0</javax.servlet-api.version>        
         
         <!-- Jersey JAX-RS core Servlet 3.x implementation  -->
-        <jersey-container-servlet.version>2.25</jersey-container-servlet.version>        
+        <jersey-container-servlet.version>2.26</jersey-container-servlet.version>        
         
         <!-- Java Annotation Indexer -->
         <jandex.version>2.0.3.Final</jandex.version>        
@@ -322,13 +322,33 @@
                 <artifactId>jersey-media-json-jackson</artifactId>
                 <version>${jersey-container-servlet.version}</version>
             </dependency>       
+
+<!-- Jersey 2 and Dependency Injection with HK2 -->
+<dependency>
+        <groupId>org.glassfish.jersey.inject</groupId>
+        <artifactId>jersey-hk2</artifactId>
+        <version>${jersey-container-servlet.version}</version>
+    </dependency>            
             
             <!-- Java Annotation Indexer -->
             <dependency>
                 <groupId>org.jboss</groupId>
                 <artifactId>jandex</artifactId>       
                 <version>${jandex.version}</version>
-            </dependency>                              
+            </dependency>    
+
+<!-- Jersey CDI 1.1 integration -->
+            <dependency>
+                <groupId>org.glassfish.jersey.ext.cdi</groupId>
+                <artifactId>jersey-cdi1x</artifactId>
+                <version>${jersey-container-servlet.version}</version>
+            </dependency>          
+   
+            <dependency>
+                <groupId>org.glassfish.jersey.ext.cdi</groupId>
+                <artifactId>jersey-weld2-se</artifactId>        
+                <version>${jersey-container-servlet.version}</version>    
+            </dependency>                            
                         
         </dependencies>			
     </dependencyManagement>
@@ -640,7 +660,14 @@
             <groupId>org.glassfish.jersey.media</groupId>
             <artifactId>jersey-media-json-jackson</artifactId>
             <scope>runtime</scope>
-        </dependency>                       
+        </dependency>         
+
+<!-- Jersey 2 and Dependency Injection with HK2 -->
+<dependency>
+        <groupId>org.glassfish.jersey.inject</groupId>
+        <artifactId>jersey-hk2</artifactId>
+            <scope>runtime</scope>
+        </dependency>             
 
         <!-- Hibernate definition of the Java Persistence 2.0 (JSR 317) API.  -->
         <dependency>
