@@ -47,8 +47,9 @@
         <slf4j.version>1.5.11</slf4j.version>
         <guava.version>20.0</guava.version>
         
-        <weld-api.version>2.0.SP1</weld-api.version>
-        <weld-spi.version>2.0.SP1</weld-spi.version>
+        <weld-api.version>2.4.SP2</weld-api.version>
+        <weld-spi.version>2.4.SP2</weld-spi.version>	
+        
         <weld.version>2.4.2.Final</weld.version>
 	    
         <javaee.version>1.0.2.Final</javaee.version>                                
@@ -266,8 +267,15 @@
                 <groupId>org.jboss.weld.servlet</groupId>
                 <artifactId>weld-servlet-core</artifactId>
                 <version>${weld.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.jboss.weld</groupId>
+                        <artifactId>weld-core-jsf</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
-            
+                        
+            <!-- https://docs.jboss.org/weld/reference/2.4.2.Final/en-US/html/environments.html#weld-servlet -->
             <dependency>
                 <groupId>org.jboss.weld.servlet</groupId>
                 <artifactId>weld-servlet</artifactId>
@@ -327,6 +335,19 @@
 
     <dependencies>
         
+        <!-- Java(TM) EE Specification APIs -->
+        <dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        
+        <!-- Expression Language API -->
+        <dependency>
+            <groupId>javax.el</groupId>
+            <artifactId>el-api</artifactId>          
+        </dependency>
+
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>            
