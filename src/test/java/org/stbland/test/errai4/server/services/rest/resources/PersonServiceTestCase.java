@@ -21,7 +21,7 @@ public class PersonServiceTestCase {
     public void findAll() {
         final List<Person> personList = personService.findAll();
         Assert.assertNotNull(personList);
-        Assert.assertEquals(3, personList.size());
+        Assert.assertEquals(4, personList.size());
     }
 
 }

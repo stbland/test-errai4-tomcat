@@ -109,6 +109,8 @@ public class AppEntryPoint {
                 for (Iterator<Person> iterator = personList.iterator(); iterator.hasNext();) {
                     person = iterator.next();
                     personListStringBuilder.append(person.getFirstName());
+                    personListStringBuilder.append(" ");
+                    personListStringBuilder.append(person.getLastName().toUpperCase());
                     if (iterator.hasNext()) {
                         personListStringBuilder.append(", ");
                     }

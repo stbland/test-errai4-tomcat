@@ -36,14 +36,16 @@
         
         <!-- Expression Language API  -->
         <el-api.version>2.2</el-api.version>
-                     
-                
+                                     
         <!-- Java(TM) EE Specification APIs -->
         <javaee-api.version>7.0</javaee-api.version>        
 
-	<!-- doesn't compile with Errai 4.1.3.Final -->
+        <!-- Errai -->
         <errai.version>4.1.3.Final</errai.version>
+
+        <!-- GWT -->
         <gwt.version>2.8.2</gwt.version>
+
         <slf4j.version>1.5.11</slf4j.version>
         <guava.version>20.0</guava.version>
         
@@ -373,7 +375,14 @@
         <groupId>org.glassfish.jersey.inject</groupId>
         <artifactId>jersey-hk2</artifactId>
         <version>${jersey-container-servlet.version}</version>
-    </dependency>            
+    </dependency>       
+
+            <!-- JAX-RS - Unit Testing Using Jersey Test Framework -->
+<dependency>
+    <groupId>org.glassfish.jersey.test-framework.providers</groupId>
+    <artifactId>jersey-test-framework-provider-jdk-http</artifactId>
+    <version>${jersey-container-servlet.version}</version>
+</dependency>     
             
             <!-- Java Annotation Indexer -->
             <dependency>
@@ -758,7 +767,15 @@
         <dependency>
             <groupId>org.jboss</groupId>
             <artifactId>jandex</artifactId>
-        </dependency>        
+        </dependency>    
+
+        <!-- JAX-RS - Unit Testing Using Jersey Test Framework -->
+<dependency>
+    <groupId>org.glassfish.jersey.test-framework.providers</groupId>
+    <artifactId>jersey-test-framework-provider-jdk-http</artifactId>
+    <scope>test</scope>
+</dependency>
+    
                 
     </dependencies>
 

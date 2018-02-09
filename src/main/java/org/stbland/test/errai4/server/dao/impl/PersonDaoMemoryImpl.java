@@ -22,7 +22,8 @@ public class PersonDaoMemoryImpl implements PersonDao {
     static {
         personByIdMap.put(0, new Person(0, "Richard", "Stallman"));
         personByIdMap.put(1, new Person(1, "Linus", "Torvalds"));
-        personByIdMap.put(2, new Person(1, "Anders", "Hejlsberg"));
+        personByIdMap.put(2, new Person(2, "Anders", "Hejlsberg"));
+        personByIdMap.put(3, new Person(3, "Bjarne", "Stroustrup"));
     }
 
     public PersonDaoMemoryImpl() {
